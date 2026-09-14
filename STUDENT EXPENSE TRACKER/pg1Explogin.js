@@ -36,7 +36,6 @@ loginBtn.onclick = function() {
         window.location.href = "Dashboard.html";
         return;
     }
-
     // EXISTING USER
     if (
         enteredUsername == savedUsername &&
@@ -48,7 +47,6 @@ loginBtn.onclick = function() {
 
         // Open Dashboard
         window.location.href = "Dashboard.html";
-
     } else {
 
         // Wrong credentials
