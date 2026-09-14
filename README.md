@@ -58,4 +58,4 @@ Through this project, I practiced:
 - Performing calculations with JavaScript
 - Managing and displaying stored data
 - Creating a multi-page web application
-SY BBA (CA) — College Academic Project
+-SY BBA (CA) — College Academic Project
