@@ -1,0 +1,65 @@
+.card {
+    width: 100%;
+
+    min-height: 140px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.09),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    border: 1px solid
+        rgba(129, 140, 248, 0.25);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.30);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Card hover */
+
+.card:hover {
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(167, 139, 250, 0.65);
+
+    box-shadow:
+        0 15px 35px
+        rgba(99, 102, 241, 0.18);
+}
+
+/* Card heading */
+
+.card h3 {
+    margin: 0 0 18px;
+
+    color: #c4b5fd;
+
+    font-size: 17px;
+}
+
+/* Card value */
+
+.card p {
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    color: #ffffff;
+}
+

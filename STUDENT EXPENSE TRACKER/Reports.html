@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reports - Student Expense Tracker</title>
+    <link rel="stylesheet" href="Report.CSS">
+</head>
+<body>
+    <h1>STUDENT EXPENSE TRACKER</h1>
+    <h2>Reports & Savings</h2>
+    <hr>
+    <!-- Spending Report -->
+    <div class="card">
+        <h3>Spending Report</h3>
+        <p> View your income and expenses here. </p>
+        <p id="reportIncome">
+            Total Income: ₹0
+        </p>
+        <p id="reportExpense">
+            Total Expense: ₹0
+        </p>
+        <p id="reportBalance">
+            Balance: ₹0
+        </p>
+    </div>
+    <br>
+    <!-- Savings Goal -->
+    <div class="card">
+        <h3>Savings Goal</h3>
+        <label for="savingGoal">
+            Enter your savings goal:
+        </label>
+        <br><br>
+        <input type="number" id="savingGoal"
+            placeholder="Enter amount">
+        <br><br>
+        <button
+            type="button"
+            id="saveGoalBtn">
+            Set Savings Goal
+        </button>
+        <p id="goalMessage"></p>
+<p id="currentBalance"></p>
+<div class="progress-container">
+    <div id="progressBar"></div>
+</div>
+<p id="progressText"></p>
+    </div>
+<!-- =========================
+     ACHIEVEMENTS & MILESTONES
+     ========================= -->
+<div class="card achievement-card">
+    <h3>🏆 Achievements & Milestones</h3>
+    <p id="achievementMessage">
+        Keep saving to unlock achievements!
+    </p>
+    <div class="achievement-list">
+        <div class="achievement" id="achievement25">
+            🌱 <strong>Smart Saver</strong>
+            <span>Reach 25% of your savings goal</span>
+        </div>
+        <div class="achievement" id="achievement50">
+            ⭐ <strong>Halfway Hero</strong>
+            <span>Reach 50% of your savings goal</span>
+        </div>
+        <div class="achievement" id="achievement75">
+            🔥 <strong>Savings Star</strong>
+            <span>Reach 75% of your savings goal</span>
+        </div>
+        <div class="achievement" id="achievement100">
+            🏆 <strong>Savings Champion</strong>
+            <span>Reach 100% of your savings goal</span>
+        </div>
+        <div class="achievement" id="achievementOver">
+            👑 <strong>Super Saver</strong>
+            <span>Save more than your goal</span>
+        </div>
+    </div>
+</div>
+<!-- =========================
+     CELEBRATION POPUP
+     ========================= -->
+<div id="celebrationBox" class="celebration-box">
+    <div class="celebration-content">
+        <div class="trophy">🏆</div>
+        <h2>Congratulations!</h2>
+        <p id="celebrationText">
+            You achieved your savings goal!
+        </p>
+        <button type="button" onclick="closeCelebration()">
+            Continue
+        </button>
+    </div>
+</div>
+<div id="confettiContainer"></div>
+<!-- Spending Visualization -->
+<div class="card">
+    <h3>Spending by Category</h3>
+    <div id="categoryReport"></div>
+</div>
+<!-- CSV Export -->
+<div class="card export-card">
+    <h3>Export Transactions</h3>
+    <p>Download your transaction history as a CSV file.</p>
+    <button type="button" id="exportBtn">
+        Export as CSV
+    </button>
+</div><br><br>
+    <!-- Back -->
+    <button
+        type="button"
+        onclick="window.location.href='Dashboard.html'">
+        Back to Dashboard
+    </button>
+                                 <!-- Reports JavaScript -->
+
+<script>
+    // =========================================
+    // LOAD TRANSACTIONS
+    // =========================================
+
+    let transactions = [];
+
+    let savedData = localStorage.getItem("transactions");
+
+    if (savedData) {
+        try {
+            transactions = JSON.parse(savedData);
+
+            // Make sure transactions is actually an array
+            if (!Array.isArray(transactions)) {
+                transactions = [];
+            }
+        } catch (error) {
+            console.error("Error loading transactions:", error);
+            transactions = [];
+        }
+    }
+
+
+    // =========================================
+    // CALCULATE INCOME AND EXPENSE
+    // =========================================
+
+    let income = 0;
+    let expense = 0;
+
+    for (let i = 0; i < transactions.length; i++) {
+
+        let amount = Number(transactions[i].amount);
+
+        // Ignore invalid amounts
+        if (isNaN(amount)) {
+            continue;
+        }
+
+        if (transactions[i].type === "Income") {
+
+            income = income + amount;
+
+        } else if (transactions[i].type === "Expense") {
+
+            expense = expense + amount;
+        }
+    }
+
+
+    // =========================================
+    // CALCULATE BALANCE
+    // =========================================
+
+    let balance = income - expense;
+    // =========================================
+    // DISPLAY REPORT
+    // =========================================
+    document.getElementById("reportIncome").innerHTML =
+        "Total Income: ₹" + income;
+
+    document.getElementById("reportExpense").innerHTML =
+        "Total Expense: ₹" + expense;
+
+    document.getElementById("reportBalance").innerHTML =
+        "Balance: ₹" + balance;
+    // =========================================
+// SAVINGS GOAL ELEMENTS
+// =========================================
+let saveGoalBtn =
+    document.getElementById("saveGoalBtn");
+
+let savingGoal =
+    document.getElementById("savingGoal");
+
+let goalMessage =
+    document.getElementById("goalMessage");
+
+let currentBalance =
+    document.getElementById("currentBalance");
+
+let progressBar =
+    document.getElementById("progressBar");
+
+let progressText =
+    document.getElementById("progressText");
+
+
+// =========================================
+// LOAD SAVED GOAL
+// =========================================
+
+let savedGoal =
+    localStorage.getItem("savingGoal");
+
+if (savedGoal) {
+
+    savingGoal.value = savedGoal;
+
+    goalMessage.innerHTML =
+        "Your savings goal is ₹" + savedGoal;
+}
+
+
+// =========================================
+// SET SAVINGS GOAL
+// =========================================
+
+saveGoalBtn.addEventListener("click", function () {
+
+    let goal = parseFloat(savingGoal.value);
+
+    if (isNaN(goal) || goal <= 0) {
+
+        goalMessage.innerHTML =
+            "Please enter a valid savings goal.";
+
+        goalMessage.style.color = "red";
+
+        return;
+    }
+
+    // Save to Local Storage
+    localStorage.setItem("savingGoal", goal);
+
+    // Show confirmation
+    goalMessage.innerHTML =
+        "Your savings goal is ₹" + goal;
+
+    goalMessage.style.color = "green";
+});
+
+
+    // =========================================
+    // SET SAVINGS GOAL
+    // =========================================
+
+    saveGoalBtn.addEventListener("click", function () {
+
+        let goal = parseFloat(savingGoal.value);
+
+        // Check whether goal is valid
+        if (isNaN(goal) || goal <= 0) {
+
+            alert("Please enter a valid savings goal.");
+
+            return;
+        }
+
+
+        // -----------------------------------------
+        // Save the new goal
+        // -----------------------------------------
+
+        localStorage.setItem("savingGoal", goal);
+
+
+        // -----------------------------------------
+        // Save balance at the moment
+        // the new goal is created
+        // -----------------------------------------
+
+        localStorage.setItem("startingBalance", balance);
+
+
+        // -----------------------------------------
+        // Reset celebration
+        // -----------------------------------------
+
+        localStorage.removeItem("goalCelebrated");
+
+
+        // -----------------------------------------
+        // Reset achievements
+        // -----------------------------------------
+
+        document.getElementById("achievement25")
+            .classList.remove("unlocked");
+
+        document.getElementById("achievement50")
+            .classList.remove("unlocked");
+
+        document.getElementById("achievement75")
+            .classList.remove("unlocked");
+
+        document.getElementById("achievement100")
+            .classList.remove("unlocked");
+
+        document.getElementById("achievementOver")
+            .classList.remove("unlocked");
+
+
+        // -----------------------------------------
+        // Reset achievement message
+        // -----------------------------------------
+
+        document.getElementById("achievementMessage")
+            .innerHTML =
+            "Keep saving to unlock achievements!";
+
+
+        // -----------------------------------------
+        // Display goal
+        // -----------------------------------------
+
+        goalMessage.innerHTML =
+            "Your savings goal is ₹" + goal;
+
+
+        // -----------------------------------------
+        // Update progress immediately
+        // -----------------------------------------
+        updateSavingsProgress();
+    });
+
+
+    // =========================================
+    // SAVINGS PROGRESS
+    // =========================================
+
+    function updateSavingsProgress() {
+
+        // -----------------------------------------
+        // Get savings goal
+        // -----------------------------------------
+
+        let goal =
+            parseFloat(savingGoal.value);
+
+
+        // If no valid goal exists,
+        // do not calculate progress
+        if (isNaN(goal) || goal <= 0) {
+
+            currentBalance.innerHTML =
+                "Current Balance: ₹" + balance;
+
+            progressBar.style.width = "0%";
+
+            progressText.innerHTML =
+                "Set a savings goal to start tracking your progress.";
+
+            return;
+        }
+
+
+        // -----------------------------------------
+        // Get starting balance
+        // -----------------------------------------
+
+        let startingBalance =
+            parseFloat(
+                localStorage.getItem("startingBalance")
+            );
+
+
+        // -----------------------------------------
+        // If starting balance doesn't exist,
+        // use current balance as starting balance
+        // -----------------------------------------
+
+        if (isNaN(startingBalance)) {
+
+            startingBalance = balance;
+
+            localStorage.setItem(
+                "startingBalance",
+                startingBalance
+            );
+        }
+
+
+        // =========================================
+        // CALCULATE SAVED AMOUNT
+        // =========================================
+
+        let savedAmount =
+            balance - startingBalance;
+
+
+        // =========================================
+        // CALCULATE ACTUAL PROGRESS
+        // =========================================
+
+        let actualProgress =
+            (savedAmount / goal) * 100;
+
+
+        // =========================================
+        // PROGRESS FOR VISUAL BAR
+        // =========================================
+        let progress = actualProgress;
+        // -----------------------------------------
+        // Prevent bar from going below 0%
+        // -----------------------------------------
+
+        if (progress < 0) {
+            progress = 0;
+        }
+        // -----------------------------------------
+        // Prevent bar from going above 100%
+        // -----------------------------------------
+        if (progress > 100) {
+            progress = 100;
+        }
+        // =========================================
+        // DISPLAY CURRENT BALANCE
+        // =========================================
+
+        currentBalance.innerHTML =
+            "Current Balance: ₹" + balance;
+
+
+        // =========================================
+        // UPDATE PROGRESS BAR
+        // =========================================
+
+        progressBar.style.width =
+            progress + "%";
+
+
+        // =========================================
+        // UPDATE PROGRESS TEXT
+        // =========================================
+
+        progressText.innerHTML =
+            Math.round(progress) +
+            "% of your savings goal achieved";
+
+
+        // =========================================
+        // UPDATE ACHIEVEMENTS
+        // =========================================
+
+        updateAchievements(actualProgress);
+
+
+        // =========================================
+        // CELEBRATION
+        // =========================================
+
+        if (
+            actualProgress >= 100 &&
+            localStorage.getItem("goalCelebrated") !== "true"
+        ) {
+
+            showCelebration();
+
+            localStorage.setItem(
+                "goalCelebrated",
+                "true"
+            );
+        }
+    }
+
+
+    // =========================================
+    // ACHIEVEMENTS
+    // =========================================
+
+    function updateAchievements(progress) {
+
+        // -----------------------------------------
+        // 25%
+        // -----------------------------------------
+
+        if (progress >= 25) {
+
+            document.getElementById("achievement25")
+                .classList.add("unlocked");
+        }
+
+
+        // -----------------------------------------
+        // 50%
+        // -----------------------------------------
+
+        if (progress >= 50) {
+
+            document.getElementById("achievement50")
+                .classList.add("unlocked");
+        }
+
+
+        // -----------------------------------------
+        // 75%
+        // -----------------------------------------
+
+        if (progress >= 75) {
+
+            document.getElementById("achievement75")
+                .classList.add("unlocked");
+        }
+
+
+        // -----------------------------------------
+        // 100%
+        // -----------------------------------------
+
+        if (progress >= 100) {
+
+            document.getElementById("achievement100")
+                .classList.add("unlocked");
+
+            document.getElementById("achievementMessage")
+                .innerHTML =
+                "🎉 Congratulations! You achieved your savings goal!";
+        }
+
+
+        // -----------------------------------------
+        // MORE THAN 100%
+        // -----------------------------------------
+
+        if (progress > 100) {
+
+            document.getElementById("achievementOver")
+                .classList.add("unlocked");
+
+            document.getElementById("achievementMessage")
+                .innerHTML =
+                "👑 Amazing! You saved more than your goal!";
+        }
+    }
+
+
+    // =========================================
+    // CELEBRATION
+    // =========================================
+
+    function showCelebration() {
+
+        document.getElementById("celebrationBox")
+            .style.display = "flex";
+
+        document.getElementById("celebrationText")
+            .innerHTML =
+            "🎉 You reached your savings goal! You are a Savings Champion!";
+
+        createConfetti();
+    }
+
+
+    // =========================================
+    // CLOSE CELEBRATION
+    // =========================================
+
+    function closeCelebration() {
+
+        document.getElementById("celebrationBox")
+            .style.display = "none";
+    }
+
+
+    // =========================================
+    // CONFETTI
+    // =========================================
+
+    function createConfetti() {
+
+        let container =
+            document.getElementById("confettiContainer");
+
+
+        // Clear old confetti first
+        container.innerHTML = "";
+
+
+        // Create 80 pieces
+        for (let i = 0; i < 80; i++) {
+
+            let piece =
+                document.createElement("div");
+
+            piece.className =
+                "confetti";
+
+            piece.style.left =
+                Math.random() * 100 + "%";
+
+            piece.style.animationDelay =
+                Math.random() * 2 + "s";
+
+            piece.style.background =
+                "hsl(" +
+                Math.random() * 360 +
+                ", 80%, 60%)";
+
+            container.appendChild(piece);
+        }
+    }
+
+
+    // =========================================
+    // SPENDING BY CATEGORY
+    // =========================================
+
+    let categoryReport =
+        document.getElementById("categoryReport");
+
+    let categoryTotals = {};
+
+
+    // -----------------------------------------
+    // Calculate category totals
+    // -----------------------------------------
+
+    for (let i = 0; i < transactions.length; i++) {
+
+        if (transactions[i].type === "Expense") {
+
+            let category =
+                transactions[i].category || "Other";
+
+            let amount =
+                Number(transactions[i].amount);
+
+            if (isNaN(amount)) {
+                continue;
+            }
+
+            categoryTotals[category] =
+                (categoryTotals[category] || 0) + amount;
+        }
+    }
+
+
+    // =========================================
+    // FIND HIGHEST CATEGORY AMOUNT
+    // =========================================
+
+    let highestAmount = 0;
+
+    for (let category in categoryTotals) {
+
+        if (
+            categoryTotals[category] >
+            highestAmount
+        ) {
+
+            highestAmount =
+                categoryTotals[category];
+        }
+    }
+
+
+    // =========================================
+    // DISPLAY CATEGORY BARS
+    // =========================================
+
+    if (highestAmount > 0) {
+
+        for (let category in categoryTotals) {
+
+            let amount =
+                categoryTotals[category];
+
+            let percentage =
+                (amount / highestAmount) * 100;
+
+
+            let row =
+                document.createElement("div");
+
+            row.className =
+                "category-row";
+
+
+            row.innerHTML =
+                '<div class="category-name">' +
+                category +
+                '</div>' +
+
+                '<div class="category-bar-container">' +
+
+                '<div class="category-bar" style="width:' +
+                percentage +
+                '%"></div>' +
+
+                '</div>' +
+
+                '<div class="category-amount">₹' +
+                amount +
+                '</div>';
+
+
+            categoryReport.appendChild(row);
+        }
+
+    } else {
+
+        categoryReport.innerHTML =
+            "<p>No expense data available.</p>";
+    }
+
+
+    // =========================================
+    // CSV EXPORT
+    // =========================================
+
+    let exportBtn =
+        document.getElementById("exportBtn");
+
+
+    exportBtn.addEventListener("click", function () {
+
+        // -----------------------------------------
+        // Check for transactions
+        // -----------------------------------------
+
+        if (transactions.length === 0) {
+
+            alert(
+                "No transactions available to export."
+            );
+
+            return;
+        }
+
+
+        // -----------------------------------------
+        // CSV header
+        // -----------------------------------------
+
+        let csv =
+            "Name,Amount,Date,Category,Description,Payment Mode,Type\n";
+
+
+        // -----------------------------------------
+        // Add transactions
+        // -----------------------------------------
+
+        for (let i = 0; i < transactions.length; i++) {
+
+            let transaction =
+                transactions[i];
+
+
+            // Safely format CSV values
+            function csvValue(value) {
+
+                if (value === undefined || value === null) {
+                    return '""';
+                }
+
+                return '"' +
+                    String(value)
+                        .replace(/"/g, '""') +
+                    '"';
+            }
+
+
+            csv +=
+                csvValue(transaction.name) + "," +
+                csvValue(transaction.amount) + "," +
+                csvValue(transaction.date) + "," +
+                csvValue(transaction.category) + "," +
+                csvValue(transaction.description) + "," +
+                csvValue(transaction.paymentMode) + "," +
+                csvValue(transaction.type) +
+                "\n";
+        }
+
+
+        // =========================================
+        // CREATE CSV FILE
+        // =========================================
+
+        let blob =
+            new Blob(
+                [csv],
+                {
+                    type: "text/csv;charset=utf-8;"
+                }
+            );
+
+
+        let url =
+            URL.createObjectURL(blob);
+
+
+        let link =
+            document.createElement("a");
+
+
+        link.href = url;
+
+        link.download =
+            "student-expense-report.csv";
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+
+        URL.revokeObjectURL(url);
+    });
+
+
+    // =========================================
+    // INITIALIZE SAVINGS PROGRESS
+    // =========================================
+
+    updateSavingsProgress();
+
+</script>
+
+    </script>
+ </body>
+</html>

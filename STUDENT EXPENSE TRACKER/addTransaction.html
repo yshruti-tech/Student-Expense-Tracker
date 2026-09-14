@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Transaction - Student Expense Tracker</title>
+    <link rel="stylesheet" href="Index.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="add-page">
+<h1>STUDENT EXPENSE TRACKER</h1>
+<h2>
+    <i class="fa-solid fa-plus-circle"></i>
+    Add Transaction
+</h2>
+<div class="container">
+    
+        <!-- Expense / Income Name -->
+        <div class="form-group">
+            <label for="expenseName">
+                <i class="fa-solid fa-tag"></i>
+                Expense/Income Name
+            </label>
+            <input
+                type="text"
+                id="expenseName"
+                placeholder="Enter expense/income name">
+        </div>
+        <!-- Amount -->
+        <div class="form-group">
+            <label for="amount">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+                Amount
+            </label>
+            <input
+                type="number"
+                id="amount"
+                placeholder="Enter amount">
+        </div>
+        <!-- Date -->
+        <div class="form-group">
+            <label for="date">
+                <i class="fa-solid fa-calendar-days"></i>
+                Date
+            </label>
+            <input
+                type="date"
+                id="date">
+        </div>
+        <!-- Category -->
+        <div class="form-group">
+            <label for="category">
+                <i class="fa-solid fa-layer-group"></i>
+                Category
+            </label>
+            <select id="category">
+                <option>Food</option>
+                <option>Travelling</option>
+                <option>Shopping</option>
+                <option>Stationery</option>
+                <option>Entertainment</option>
+                <option>Medical</option>
+                <option>Other</option>
+            </select>
+        </div>
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">
+                <i class="fa-solid fa-pen"></i>
+                Description
+            </label>
+            <textarea
+                id="description"
+                placeholder="Add notes"
+            ></textarea>
+        </div>
+        <!-- Payment Mode -->
+        <div class="form-group">
+            <label for="paymentMode">
+                <i class="fa-solid fa-credit-card"></i>
+                Payment Mode
+            </label>
+            <select id="paymentMode">
+                <option>Cash</option>
+                <option>UPI</option>
+                <option>Card</option>
+            </select>
+        </div>
+        <!-- Transaction Type -->
+        <div class="form-group">
+            <label>
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                Transaction Type
+            </label>
+            <div class="radio-group">
+                <label for="expenseRadio">
+                    <input
+                        type="radio"
+                        id="expenseRadio"
+                        name="type"
+                        value="Expense">
+                    <i class="fa-solid fa-arrow-down"></i>
+                    Expense
+                </label>
+                <label for="incomeRadio">
+                    <input
+                        type="radio"
+                        id="incomeRadio"
+                        name="type"
+                        value="Income"
+                    >
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Income
+                </label>
+            </div>
+        </div>
+        <!-- Buttons -->
+        <div class="button-group">
+            <button
+                type="button"
+                id="addBtn"
+            >
+                <i class="fa-solid fa-plus"></i>
+                Add Transaction
+            </button>
+            <button
+                type="button"
+                id="backBtn"
+            >
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Dashboard
+            </button>
+        </div>
+    </div>
+    <script src="Expensescript.js"></script>
+</body>
+</html>

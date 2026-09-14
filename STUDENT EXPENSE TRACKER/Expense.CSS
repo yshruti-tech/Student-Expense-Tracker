@@ -1,0 +1,282 @@
+/* =========================================
+   BASIC RESET
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   PAGE
+   ========================================= */
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 25px;
+
+    font-family: Arial, sans-serif;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(16, 185, 129, 0.22),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(139, 92, 246, 0.28),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #111827,
+            #0f172a,
+            #172554
+        );
+}
+
+
+/* =========================================
+   LOGIN BOX
+   ========================================= */
+
+.login-box {
+    width: 520px;
+
+    padding: 40px 50px;
+
+    background: rgba(30, 41, 59, 0.88);
+
+    border: 1px solid rgba(167, 139, 250, 0.8);
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 0 20px rgba(139, 92, 246, 0.25),
+        0 15px 40px rgba(0, 0, 0, 0.45);
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* =========================================
+   LOGO
+   ========================================= */
+
+.logo {
+    font-size: 45px;
+
+    margin-bottom: 10px;
+
+    text-shadow:
+        0 0 10px rgba(96, 165, 250, 0.9),
+        0 0 20px rgba(139, 92, 246, 0.7);
+}
+
+.logo span {
+    color: #facc15;
+
+    font-size: 25px;
+
+    position: relative;
+    left: -18px;
+    top: 8px;
+
+    text-shadow:
+        0 0 8px rgba(250, 204, 21, 0.9);
+}
+
+
+/* =========================================
+   MAIN HEADING
+   ========================================= */
+
+.login-box h1 {
+    margin: 5px 0 12px;
+
+    font-size: 30px;
+
+    letter-spacing: 1px;
+
+    color: #f8fafc;
+
+    text-shadow:
+        0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+
+/* =========================================
+   LOGIN HEADING
+   ========================================= */
+
+.login-box h2 {
+    margin: 8px 0;
+
+    color: #c084fc;
+
+    font-size: 25px;
+
+    text-shadow:
+        0 0 10px rgba(192, 132, 252, 0.6);
+}
+
+
+/* =========================================
+   TAGLINE
+   ========================================= */
+
+.tagline {
+    margin: 10px 0 25px;
+
+    color: #e2e8f0;
+
+    font-size: 16px;
+}
+
+
+/* =========================================
+   LABELS
+   ========================================= */
+
+label {
+    display: block;
+
+    text-align: left;
+
+    margin-top: 18px;
+    margin-bottom: 7px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    color: #f1f5f9;
+}
+
+
+/* =========================================
+   INPUT BOXES
+   ========================================= */
+
+input {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid transparent;
+
+    border-radius: 9px;
+
+    background: rgba(71, 85, 105, 0.75);
+
+    color: white;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+
+/* Placeholder */
+
+input::placeholder {
+    color: #cbd5e1;
+}
+
+
+/* Input hover */
+
+input:hover {
+    border-color: rgba(167, 139, 250, 0.7);
+}
+
+
+/* Input focus */
+
+input:focus {
+    border-color: #a78bfa;
+
+    box-shadow:
+        0 0 10px rgba(167, 139, 250, 0.35);
+}
+
+
+/* =========================================
+   LOGIN BUTTON
+   ========================================= */
+
+button {
+    width: 100%;
+
+    margin-top: 28px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #818cf8,
+            #c084fc
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    box-shadow:
+        0 0 12px rgba(139, 92, 246, 0.35);
+}
+
+
+/* Button hover */
+
+button:hover {
+    transform: translateY(-2px);
+
+    background:
+        linear-gradient(
+            90deg,
+            #6366f1,
+            #a855f7
+        );
+
+    box-shadow:
+        0 0 20px rgba(168, 85, 247, 0.6);
+}
+/* Button click */
+button:active {
+    transform: translateY(0);
+}
+/* =========================================
+   MESSAGE
+   ========================================= */
+#message {
+    margin-top: 15px;
+
+    font-size: 14px;
+}
+<button type="submit">Login</button>
+

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<head><link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Dashboard - Student Expense Tracker</title>
+    <link rel="stylesheet" href="Index.css">
+</head><body><h1>STUDENT EXPENSE TRACKER</h1>
+<h2>Dashboard</h2>
+<hr>
+<!-- Student Name -->
+<h3 id="welcomeName">Welcome!</h3>
+<!-- Summary -->
+<div class="summary">
+    <div class="card">
+        <h3>Current Balance</h3>
+        <p id="balance">&#8377;0</p>
+    </div>
+    <div class="card">
+        <h3>Total Income</h3>
+        <p id="totalIncome">&#8377;0</p>
+    </div>
+    <div class="card">
+        <h3>Total Expense</h3>
+        <p id="totalExpense">&#8377;0</p>
+    </div>
+</div>
+<br>
+<!-- Add Transaction -->
+<button onclick="location.href='addTransaction.html'">
+    <i class="fa-solid fa-plus"></i>
+    Add Transaction
+</button>
+<br><br>
+<!-- Transaction History -->
+<h2><h2>
+    <i class="fa-solid fa-clock-rotate-left"></i>
+Recent Transactions</h2>
+
+<div id="history">
+    No Transaction Yet.
+</div>
+<br><br>
+<!-- Reports -->
+<button onclick="location.href='Reports.html'">
+    <i class="fa-solid fa-chart-pie"></i>
+    Reports & Savings
+</button>
+<br><br>
+<!-- Back -->
+<button
+    type="button"
+    onclick="window.location.href='pg1Expnse.html'">
+    Go Back
+</button>
+<script>
+    // ---------- Student Name ----------
+    let welcomeName =
+        document.getElementById("welcomeName");
+    let studentName =
+        localStorage.getItem("studentName");
+    if (studentName) {
+        welcomeName.innerHTML =
+            "Welcome, " + studentName + "!";
+    }
+    // ---------- Dashboard Elements ----------
+    let balance =
+        document.getElementById("balance");
+    let totalIncome =
+        document.getElementById("totalIncome");
+    let totalExpense =
+        document.getElementById("totalExpense");
+    let history =
+        document.getElementById("history");
+    // ---------- Load Transactions ----------
+    let transactions = [];
+    let savedData =
+        localStorage.getItem("transactions");
+    if (savedData){
+        transactions = JSON.parse(savedData);
+    }
+    // ---------- Update Dashboard ----------
+    function updateDashboard() {
+        let income = 0;
+        let expense = 0;
+        // Calculate Income and Expense
+        for (let i = 0;
+             i < transactions.length;
+             i++) {
+            if (transactions[i].type === "Income") {
+                income =
+                    income +
+                    Number(transactions[i].amount);
+            }
+            else if (transactions[i].type === "Expense") {
+                expense =
+                    expense +
+                    Number(transactions[i].amount);
+            }
+        }
+        // Display Summary
+        totalIncome.innerHTML =
+            "₹" + income;
+        totalExpense.innerHTML =
+            "₹" + expense;
+        balance.innerHTML =
+            "₹" + (income - expense);
+        // Display Transactions
+        if (transactions.length === 0) {
+            history.innerHTML =
+                "No Transaction Yet.";
+            return;
+        }
+        history.innerHTML = "";
+        // Show latest 3 transactions
+        let start =
+            Math.max(0, transactions.length - 3);
+        for (let i = transactions.length - 1;
+             i >= start;
+             i--) {
+            let transaction =
+                transactions[i];
+            // Create transaction card
+            let div =
+                document.createElement("div");
+            div.className =
+                "transaction";
+            // Transaction information
+            div.innerHTML =
+                "<div class='transaction-top'>" +
+                    "<b class='transaction-name'>" +
+                        transaction.name +
+                    "</b>" +
+                    "<span class='transaction-amount " +
+                    (transaction.type === "Expense"
+                        ? "expense"
+                        : "income") +
+                    "'>" +
+                        (transaction.type === "Expense"
+                            ? "−"
+                            : "+") +
+                        " ₹" +
+                        transaction.amount +
+                    "</span>" +
+                "</div>" +
+                "<div class='transaction-details'>" +
+                    "<span>" +
+                        transaction.type +
+                    "</span>" +
+                    "<span>•</span>" +
+                    "<span>" +
+                        transaction.category +
+                    "</span>" +
+                    "<span>•</span>" +
+                    "<span>" +
+                        transaction.paymentMode +
+                    "</span>" +
+                "</div>" +
+                "<div class='transaction-date'>" +
+                    transaction.date +
+                "</div>" +
+                "<button type='button' " +
+                "onclick='deleteTransaction(" +
+                i +
+                ")'>" +
+                    "Delete" +
+                "</button>";
+            // Add card to history
+            history.appendChild(div);
+        }
+    }
+    // ---------- Delete Transaction ----------
+    function deleteTransaction(index) {
+        let confirmDelete =
+            confirm(
+                "Are you sure you want to delete this transaction?"
+            );
+        if (!confirmDelete) {
+            return;
+        }
+        // Remove transaction
+        transactions.splice(index, 1);
+        // Save updated data
+        localStorage.setItem(
+            "transactions",
+            JSON.stringify(transactions)
+        );
+        // Refresh dashboard
+        window.location.reload();
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "pg1Expense.html";
+}
+    }
+    // ---------- Run Dashboard ----------
+    updateDashboard();
+</script>
+</body>
+</html>       
